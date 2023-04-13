@@ -22,7 +22,7 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ClienteDTO> cadastrarCliente(@Valid @RequestBody Cliente cliente) throws CpfAlreadyExistsException {
+    public ResponseEntity<ClienteDTO> cadastrarCliente(@Valid @RequestBody Cliente cliente) {
         Cliente clienteCadastrado;
         clienteCadastrado = clienteService.cadastrarCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ClienteDTO(clienteCadastrado));
@@ -41,8 +41,8 @@ public class ClienteController {
         Cliente cliente = clienteService.buscarClientePorCpf(cpf);
         return ResponseEntity.ok(cliente);
     }
-    @PutMapping("/{cpf}")
-    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable String cpf, @Valid @RequestBody Cliente clienteDTO) throws ClienteNotFoundException {
+    @PutMapping("{cpf}")
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable String cpf, @Valid @RequestBody Cliente clienteDTO) throws ClienteNotFoundException{
         Cliente cliente = clienteService.atualizarCliente(cpf, clienteDTO);
         return ResponseEntity.ok().body(new ClienteDTO(cliente));
     }

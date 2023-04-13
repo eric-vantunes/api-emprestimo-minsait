@@ -1,6 +1,5 @@
 package com.teste.minsait.sistemaemprestimos.repository;
 
-import com.teste.minsait.sistemaemprestimos.entity.Emprestimo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.teste.minsait.sistemaemprestimos.entity.Cliente;
 

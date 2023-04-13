@@ -16,10 +16,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente cadastrarCliente(Cliente cliente) throws CpfAlreadyExistsException {
-        if (clienteRepository.existsByCpf(cliente.getCpf())) {
-            throw new CpfAlreadyExistsException(cliente.getCpf());
-        }
+    public Cliente cadastrarCliente(Cliente cliente) {
         return this.clienteRepository.save(cliente);
     }
 
@@ -34,33 +31,42 @@ public class ClienteService {
     }
 
     public Cliente atualizarCliente(String cpf, @Valid Cliente cliente) throws ClienteNotFoundException {
-        if(this.clienteRepository.existsByCpf(cpf)) {
-            throw new ClienteNotFoundException("Cliente não encontrado!");
-        }
+        if (this.clienteRepository.existsByCpf(cpf)) {
             Cliente clienteAtualizado = this.clienteRepository.findByCpf(cpf).get();
-        if (cliente.getNome() != null) {
-            cliente.setNome(cliente.getNome());
+            if (cliente.getCpf() != null) {
+                clienteAtualizado.setCpf(cliente.getCpf());
+            }
+            if (cliente.getNome() != null) {
+                clienteAtualizado.setNome(cliente.getNome());
+            }
+            if (cliente.getTelefone() != null) {
+                clienteAtualizado.setTelefone(cliente.getTelefone());
+            }
+            if (cliente.getRua() != null) {
+                clienteAtualizado.setRua(cliente.getRua());
+            }
+            if (cliente.getNumero() != 0) {
+                clienteAtualizado.setNumero(cliente.getNumero());
+            }
+            if (cliente.getCep() != null) {
+                clienteAtualizado.setCep(cliente.getCep());
+            }
+            if (cliente.getRendimentoMensal() != null) {
+                clienteAtualizado.setRendimentoMensal(cliente.getRendimentoMensal());
+            }
+
+            return clienteRepository.save(clienteAtualizado);
         }
-        if (cliente.getTelefone() != null) {
-            cliente.setTelefone(cliente.getTelefone());
-        }
-        if (cliente.getRua() != null) {
-            cliente.setRua(cliente.getRua());
-        }
-        if (cliente.getNumero() != 0) {
-            cliente.setNumero(cliente.getNumero());
-        }
-        if (cliente.getCep() != null) {
-            cliente.setCep(cliente.getCep());
-        }
-        return this.clienteRepository.save(cliente);
-    }
-    public void deletarCliente(String cpf) throws ClienteNotFoundException {
-        Optional<Cliente> clienteOptional = clienteRepository.findByCpf(cpf);
-        if (!clienteOptional.isPresent()) {
-            throw new ClienteNotFoundException(cpf);
-        }
-        clienteRepository.delete(clienteOptional.get());
+        throw new ClienteNotFoundException(cpf);
     }
 
-}
+    public void deletarCliente (String cpf) throws ClienteNotFoundException {
+            Optional<Cliente> clienteOptional = clienteRepository.findByCpf(cpf);
+            if (!clienteOptional.isPresent()) {
+                throw new ClienteNotFoundException(cpf);
+            }
+            clienteRepository.delete(clienteOptional.get());
+        }
+    }
+
+
